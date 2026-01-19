@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: global-ingress
+spec:
+  rules:
+    - host: users.172.18.253.218.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: users-svc
+                port:
+                  number: 80
+
+    - host: quotes.172.18.253.218.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: quotes-svc
+                port:
+                  number: 80
+
+    - host: search.172.18.253.218.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: search-svc
+                port:
+                  number: 80
