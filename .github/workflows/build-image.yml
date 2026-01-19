@@ -1,0 +1,42 @@
+name: Build Image - Push registry GitHub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-all:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Définir la version (Short SHA)
+        run: echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Login GitHub Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # USERS
+      - name: Build & Push Users
+        run: |
+          docker build ./users -t ghcr.io/teohubert/users:latest -t ghcr.io/teohubert/users:${{ env.VERSION }}
+          docker push ghcr.io/teohubert/users:latest
+          docker push ghcr.io/teohubert/users:${{ env.VERSION }}
+
+      # QUOTES
+      - name: Build & Push Quotes
+        run: |
+          docker build ./quotes -t ghcr.io/teohubert/quotes:latest -t ghcr.io/teohubert/quotes:${{ env.VERSION }}
+          docker push ghcr.io/teohubert/quotes:latest
+          docker push ghcr.io/teohubert/quotes:${{ env.VERSION }}
+
+      # SEARCH
+      - name: Build & Push Search
+        run: |
+          docker build ./search -t ghcr.io/teohubert/search:latest -t ghcr.io/teohubert/search:${{ env.VERSION }}
+          docker push ghcr.io/teohubert/search:latest
+          docker push ghcr.io/teohubert/search:${{ env.VERSION }}
