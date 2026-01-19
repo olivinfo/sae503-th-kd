@@ -14,8 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Définir la version (Short SHA)
-        run: echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Définir variables (Version + Owner)
+        run: |
+          echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
 
       - name: Login GitHub Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -23,20 +27,20 @@ jobs:
       # USERS
       - name: Build & Push Users
         run: |
-          docker build ./users -t ghcr.io/teohubert/users:latest -t ghcr.io/teohubert/users:${{ env.VERSION }}
-          docker push ghcr.io/teohubert/users:latest
-          docker push ghcr.io/teohubert/users:${{ env.VERSION }}
+          docker build ./users -t ghcr.io/${{ env.OWNER_LC }}/users:latest -t ghcr.io/${{ env.OWNER_LC }}/users:${{ env.VERSION }}
+          docker push ghcr.io/${{ env.OWNER_LC }}/users:latest
+          docker push ghcr.io/${{ env.OWNER_LC }}/users:${{ env.VERSION }}
 
       # QUOTES
       - name: Build & Push Quotes
         run: |
-          docker build ./quotes -t ghcr.io/teohubert/quotes:latest -t ghcr.io/teohubert/quotes:${{ env.VERSION }}
-          docker push ghcr.io/teohubert/quotes:latest
-          docker push ghcr.io/teohubert/quotes:${{ env.VERSION }}
+          docker build ./quotes -t ghcr.io/${{ env.OWNER_LC }}/quotes:latest -t ghcr.io/${{ env.OWNER_LC }}/quotes:${{ env.VERSION }}
+          docker push ghcr.io/${{ env.OWNER_LC }}/quotes:latest
+          docker push ghcr.io/${{ env.OWNER_LC }}/quotes:${{ env.VERSION }}
 
       # SEARCH
       - name: Build & Push Search
         run: |
-          docker build ./search -t ghcr.io/teohubert/search:latest -t ghcr.io/teohubert/search:${{ env.VERSION }}
-          docker push ghcr.io/teohubert/search:latest
-          docker push ghcr.io/teohubert/search:${{ env.VERSION }}
+          docker build ./search -t ghcr.io/${{ env.OWNER_LC }}/search:latest -t ghcr.io/${{ env.OWNER_LC }}/search:${{ env.VERSION }}
+          docker push ghcr.io/${{ env.OWNER_LC }}/search:latest
+          docker push ghcr.io/${{ env.OWNER_LC }}/search:${{ env.VERSION }}
