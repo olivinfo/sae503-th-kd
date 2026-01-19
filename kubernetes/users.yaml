@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: users
+  template:
+    metadata:
+      labels:
+        service: users
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: users-service
+        image: ghcr.io/olivinfo/users:latest
+        env:
+        - name: REDIS_HOST
+          value: "redis-svc"
+        - name: REDIS_PORT
+          value: "6379"
+        ports:
+        - containerPort: 5000
