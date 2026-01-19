@@ -16,7 +16,7 @@ spec:
               service:
                 name: users-svc
                 port:
-                  number: 5000
+                  number: 80
     - host: quotes.172.18.253.218.nip.io
       http:
         paths:
@@ -26,7 +26,7 @@ spec:
               service:
                 name: quotes-svc
                 port:
-                  number: 5000
+                  number: 80
     - host: search.172.18.253.218.nip.io
       http:
         paths:
@@ -36,4 +36,4 @@ spec:
               service:
                 name: search-svc
                 port:
-                  number: 5000
+                  number: 80
