@@ -12,6 +12,8 @@ spec:
       labels:
         service: quotes
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
       - name: quotes-service
         image: ghcr.io/olivinfo/quotes:latest
