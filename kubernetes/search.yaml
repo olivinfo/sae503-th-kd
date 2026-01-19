@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: search
+  template:
+    metadata:
+      labels:
+        service: search
+    spec:
+      containers:
+      - name: search-service
+        image: ghcr.io/olivinfo/search:latest
+        env:
+        - name: REDIS_HOST
+          value: "redis-svc"
+        - name: REDIS_PORT
+          value: "6379"
+        ports:
+        - containerPort: 5000
