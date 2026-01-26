@@ -1,0 +1,34 @@
+meta {
+  name: ADD Quote
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{proto}}://{{quotes_srv}}/quotes
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{admin_key}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user_id": "3",
+    "quote": "C'est trop calme... J'aime pas trop beaucoup ça... J'préfère quand c'est un peu trop plus moins calme."
+  }
+}
+
+body:multipart-form {
+  id: 3
+  name: Tintin
+  password: bonjour
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

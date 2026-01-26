@@ -1,0 +1,35 @@
+meta {
+  name: ADD User
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{proto}}://{{users_srv}}/users
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{admin_key}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": 3,
+    "name": "Numérobis",
+    "password": "bonjour"
+  }
+}
+
+body:multipart-form {
+  id: 3
+  name: Tintin
+  password: bonjour
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
