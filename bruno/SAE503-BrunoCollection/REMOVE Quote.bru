@@ -1,0 +1,27 @@
+meta {
+  name: REMOVE Quote
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{proto}}://{{quotes_srv}}/quotes/3
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: {{admin_key}}
+  Content-Type: application/json
+}
+
+body:multipart-form {
+  id: 3
+  name: Tintin
+  password: bonjour
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
