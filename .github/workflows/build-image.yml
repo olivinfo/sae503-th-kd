@@ -2,7 +2,7 @@ name: Build Image - Push registry GitHub
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build-all:
@@ -14,33 +14,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Définir variables (Version + Owner)
+      - name: Définir variables
         run: |
+          BRANCH_NAME=${GITHUB_REF_NAME}
+          echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
         env:
           OWNER: '${{ github.repository_owner }}'
 
       - name: Login GitHub Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # USERS
       - name: Build & Push Users
         run: |
-          docker build ./users -t ghcr.io/${{ env.OWNER_LC }}/users:latest -t ghcr.io/${{ env.OWNER_LC }}/users:${{ env.VERSION }}
-          docker push ghcr.io/${{ env.OWNER_LC }}/users:latest
-          docker push ghcr.io/${{ env.OWNER_LC }}/users:${{ env.VERSION }}
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/users
+          # On tag avec le nom de la branche (main/develop) ET le SHA
+          docker build ./users -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
 
       # QUOTES
       - name: Build & Push Quotes
         run: |
-          docker build ./quotes -t ghcr.io/${{ env.OWNER_LC }}/quotes:latest -t ghcr.io/${{ env.OWNER_LC }}/quotes:${{ env.VERSION }}
-          docker push ghcr.io/${{ env.OWNER_LC }}/quotes:latest
-          docker push ghcr.io/${{ env.OWNER_LC }}/quotes:${{ env.VERSION }}
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/quotes
+          docker build ./quotes -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
 
       # SEARCH
       - name: Build & Push Search
         run: |
-          docker build ./search -t ghcr.io/${{ env.OWNER_LC }}/search:latest -t ghcr.io/${{ env.OWNER_LC }}/search:${{ env.VERSION }}
-          docker push ghcr.io/${{ env.OWNER_LC }}/search:latest
-          docker push ghcr.io/${{ env.OWNER_LC }}/search:${{ env.VERSION }}
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/search
+          docker build ./search -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
