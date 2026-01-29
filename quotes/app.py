@@ -83,7 +83,11 @@ def add_quote():
         return jsonify({"error": "user_id et quote sont requis"}), 400
 
     quote_id = redis_client.incr("quote_id")
-    redis_client.hset("quotes", quote_id, str({"user_id": user_id, "quote": quote}))
+      # modification---------------------------------------------------------
+    redis_client.hset(f"quote:{quote_id}", mapping={"user_id": user_id, "quote": quote})
+    redis_client.sadd("quotes", f"quote:{quote_id}")
+#---------------------------------------------------------------------
+    #redis_client.hset("quotes", quote_id, str({"user_id": user_id, "quote": quote}))
     return jsonify({"message": "Citation ajoutée", "id": quote_id}), 201
 
 @app.route('/quotes/<int:quote_id>', methods=['DELETE'])
