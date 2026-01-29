@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "SAE503-BrunoCollection",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

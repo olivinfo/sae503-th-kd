@@ -22,5 +22,10 @@ spec:
           value: "redis-svc"
         - name: REDIS_PORT
           value: "6379"
+        - name: ADMIN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: search-secrets
+              key: ADMIN_KEY
         ports:
         - containerPort: 5000
