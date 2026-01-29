@@ -1,0 +1,57 @@
+name: Build Image - Push registry GitHub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-all:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Définir variables
+        run: |
+          BRANCH_NAME=${GITHUB_REF_NAME}
+          echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+          echo "VERSION_NAME=${{ github.event.head_commit.message }}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
+      - name: Login GitHub Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # USERS
+      - name: Build & Push Users
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/users
+          # On tag avec le nom de la branche (main/develop) ET le SHA
+          docker build ./users -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
+
+      # QUOTES
+      - name: Build & Push Quotes
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/quotes
+          docker build ./quotes -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
+
+      # SEARCH
+      - name: Build & Push Search
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/search
+          docker build ./search -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
+          docker push ${IMAGE_NAME}:${{ env.BRANCH }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION }}
