@@ -34,8 +34,8 @@ jobs:
       # USERS
       - name: Build & Push Users
         run: |
+          echo ${VERSION_NAME}
           IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/users
-          # On tag avec le nom de la branche (main/develop) ET le SHA
           docker build ./users -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
           docker push ${IMAGE_NAME}:${{ env.BRANCH }}
           docker push ${IMAGE_NAME}:${{ env.VERSION }}
