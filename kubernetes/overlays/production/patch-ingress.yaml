@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: global-ingress
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: request-limit@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: cch-production-request-limit@kubernetescrd
 spec:
   rules:
     - host: users.172.18.253.218.nip.io
