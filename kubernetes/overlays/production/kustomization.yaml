@@ -6,5 +6,13 @@ resources:
 
 namespace: cch-production
 
+images:
+  - name: ghcr.io/olivinfo/quotes
+    newTag: main
+  - name: ghcr.io/olivinfo/users
+    newTag: main
+  - name: ghcr.io/olivinfo/search
+    newTag: main
+
 patches:
   - path: patch-ingress.yaml
