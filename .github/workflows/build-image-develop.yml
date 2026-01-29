@@ -34,11 +34,11 @@ jobs:
       # USERS
       - name: Build & Push Users
         run: |
-          echo ${VERSION_NAME}
           IMAGE_NAME=ghcr.io/${{ env.OWNER_LC }}/users
           docker build ./users -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
           docker push ${IMAGE_NAME}:${{ env.BRANCH }}
           docker push ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION_NAME }}
 
       # QUOTES
       - name: Build & Push Quotes
@@ -47,6 +47,7 @@ jobs:
           docker build ./quotes -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
           docker push ${IMAGE_NAME}:${{ env.BRANCH }}
           docker push ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION_NAME }}
 
       # SEARCH
       - name: Build & Push Search
@@ -55,3 +56,4 @@ jobs:
           docker build ./search -t ${IMAGE_NAME}:${{ env.BRANCH }} -t ${IMAGE_NAME}:${{ env.VERSION }} -t ${IMAGE_NAME}:${{ env.VERSION_NAME }}
           docker push ${IMAGE_NAME}:${{ env.BRANCH }}
           docker push ${IMAGE_NAME}:${{ env.VERSION }}
+          docker push ${IMAGE_NAME}:${{ env.VERSION_NAME }}
