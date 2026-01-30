@@ -16,7 +16,22 @@ spec:
         - name: ghcr-secret
       containers:
       - name: users-service
-        image: ghcr.io/olivinfo/users:latest
+        image: ghcr.io/olivinfo/users:main
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          runAsGroup: 10001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true 
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
         env:
         - name: REDIS_HOST
           value: "redis-svc"
