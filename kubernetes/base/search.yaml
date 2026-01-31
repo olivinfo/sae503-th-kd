@@ -12,11 +12,30 @@ spec:
       labels:
         service: search
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       imagePullSecrets:
         - name: ghcr-secret
       containers:
       - name: search-service
-        image: ghcr.io/olivinfo/search:latest
+        image: ghcr.io/olivinfo/search:main
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          runAsGroup: 10001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true 
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
         env:
         - name: REDIS_HOST
           value: "redis-svc"
