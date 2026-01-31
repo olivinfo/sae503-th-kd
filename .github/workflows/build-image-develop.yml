@@ -20,7 +20,7 @@ jobs:
           echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
-          echo "VERSION_NAME=$(git log -1 --format=%s)" >> $GITHUB_ENV
+          echo "VERSION_NAME=$(git log -1 --format=%s | tr -d '[:space:]')" >> $GITHUB_ENV
         env:
           OWNER: '${{ github.repository_owner }}'
 
