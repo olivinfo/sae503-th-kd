@@ -14,7 +14,7 @@ Le cluster est segmenté en espaces de noms/namespaces distincts pour isoler les
 ## 2. Optimisation des images Docker
 Les images sont construites sur une base minimale afin de réduire la surface d'attaque en supprimant les binaires inutiles (shells, gestionnaires de paquets). Cela permet également le limiter la consommation de ressources.
 
-**Résultat** : Dockerfiles utilise `python:3.9-slim`.
+**Résultat** : Dockerfiles utilise `python:3.9-alpine`.
 
 ---
 
@@ -50,3 +50,15 @@ L'outil **Trivy** est utilisé pour s'assurer de l'absence de vulnérabilités c
 - **Gestion des exceptions** : Un fichier `.trivyignore` documente les règles exclues de manière justifiée (ex: namespace par défaut qui est surchargé plus tard par Kustomize).
 
 **Résultat** : Le rapport d'audit affiche désormais **0 mauvaises configurations** détectées.
+
+### b) Les Dockerfiles
+L'analyse s'étend à la définition des images Docker via les Dockerfiles pour garantir qu'elles respectent les recommandations de sécurité de Trivy.
+
+**Mise en oeuvre** :
+- **Analyse par service** : Exécution de `trivy config ./<service>` pour chaque dossier (`users`, `quotes`, `search`).
+- **Correction des configurations** :
+    - Ajout de l'instruction `USER` pour éviter l'exécution root par défaut.
+    - Ajout de `HEALTHCHECK` pour permettre à l'orchestrateur de vérifier la santé du service.
+
+**Résultat** : Les rapports Trivy pour `users`, `quotes` et `search` affiche désormais **0 mauvaises configurations** détectées.
+
