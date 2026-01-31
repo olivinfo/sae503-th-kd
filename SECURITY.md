@@ -37,3 +37,16 @@ Les mesures suivantes sont appliquées dans les manifestes de déploiement :
 - **Suppression des capabilities** : Toutes les capacités Linux par défaut sont retirées (`drop: ["ALL"]`) pour réduire la surface d'attaque en cas de compromission.
 
 **Résultat** : Présence du bloc `securityContext` dans `quotes.yaml`, `users.yaml` et `search.yaml`.
+
+---
+
+## 5. Audit de vulnérabilités Trivy
+### a) Les manifests Kubernetes
+L'outil **Trivy** est utilisé pour s'assurer de l'absence de vulnérabilités connues et de mauvaises configurations dans l'infrastructure as code (IaC) et les images de conteneurs.
+
+**Mise en oeuvre** :
+- **Analyse des manifestes** : Commande `trivy config ./kubernetes` utilisée pour valider les configurations de sécurité.
+- **Correction des configurations** : Les alertes remontées (ex: utilisation de tags `latest`, exécution root) ont été corrigées pour atteindre un état sain.
+- **Gestion des exceptions** : Un fichier `.trivyignore` documente les règles exclues de manière justifiée (ex: namespace par défaut qui est surchargé plus tard par Kustomize).
+
+**Résultat** : Le rapport d'audit affiche désormais **0 mauvaises configurations** détectées.
