@@ -1,0 +1,6 @@
+image:
+  registry: ghcr.io/olivinfo
+  tag: latest
+
+ingress:
+  host: 172.18.253.218.nip.io

@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: request-limit
+spec:
+  rateLimit:
+    average: 10
+    period: 1m

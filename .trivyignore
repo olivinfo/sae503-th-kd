@@ -1,0 +1,17 @@
+# Empêche Trivy de forcer l'usage d'un namespace pas par défaut surchargé dans les kustomizes
+AVD-KSV-0125
+
+# Empêche Trivy de bloquer sur le nom du micro-service "users"
+AVD-KSV-0110
+
+# Empêche Trivy de forcer l'usage exclusif de registres Azure (azurecr.io)
+AVD-KSV-0032
+
+# Empêche Trivy de forcer l'usage exclusif de registres Google (gcr.io)
+AVD-KSV-0033
+
+# Autorise les domaines de registres publics ou externes (ex: ghcr.io, Docker Hub)
+AVD-KSV-0034
+
+# Empêche Trivy de forcer l'usage exclusif de registres AWS (ecr.amazonaws.com)
+AVD-KSV-0035

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: cch
+description: Citations du Capitaine Haddock
+version: 1.0.0

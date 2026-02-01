@@ -3,10 +3,11 @@ kind: Ingress
 metadata:
   name: global-ingress
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: cch-production-request-limit@kubernetescrd
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
+  ingressClassName: traefik
   rules:
-    - host: users.172.18.253.218.nip.io
+    - host: users.{{ .Values.ingress.host }}
       http:
         paths:
           - path: /
@@ -16,8 +17,7 @@ spec:
                 name: users-svc
                 port:
                   number: 80
-
-    - host: quotes.172.18.253.218.nip.io
+    - host: quotes.{{ .Values.ingress.host }}
       http:
         paths:
           - path: /
@@ -27,8 +27,7 @@ spec:
                 name: quotes-svc
                 port:
                   number: 80
-
-    - host: search.172.18.253.218.nip.io
+    - host: search.{{ .Values.ingress.host }}
       http:
         paths:
           - path: /
