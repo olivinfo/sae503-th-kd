@@ -62,7 +62,26 @@ L'analyse s'étend à la définition des images Docker via les Dockerfiles pour 
 
 **Résultat** : Les rapports Trivy pour `users`, `quotes` et `search` affiche désormais **0 mauvaises configurations** détectées.
 
+### c) Surveillance continue via Trivy Operator
 
+L'opérateur Trivy est déployé dans le cluster pour assurer une analyse automatique et continue des vulnérabilités des workloads en cours d'exécution.
+
+**Mise en œuvre** :
+- **Installation via Helm** :
+```bash
+helm install trivy-operator aqua/trivy-operator \
+  --namespace trivy-system \
+  --create-namespace \
+  --set="trivy.ignoreUnfixed=true" \
+  --set="targetNamespaces=cch-recette" \
+  --set="serviceMonitor.enabled=false"
+```
+
+- **Détails des paramètres de configuration** :
+  - `trivy.ignoreUnfixed=true` : Exclut les CVE sans correctif disponible pour réduire le bruit des fails.
+  - `targetNamespaces=cch-recette` : Limite la surveillance au namespace de recette par exemple.
+
+**Résultat** : L'opérateur génère automatiquement des rapports. Avec ArgoCD, on peut consulter le resultat de ces analyses.
 
 ## 6. Configuration des Secrets
 
