@@ -4,9 +4,9 @@ metadata:
   name: quota
 spec:
   hard:
-    pods: "10"
-    requests.cpu: "1"
-    requests.memory: 1Gi
+    pods: "30"
+    requests.cpu: "4"
+    requests.memory: 8Gi
 ---
 apiVersion: v1
 kind: LimitRange
@@ -15,9 +15,9 @@ metadata:
 spec:
   limits:
     - default:
-        cpu: 150m
-        memory: 128Mi
+        cpu: 300m
+        memory: 256Mi
       defaultRequest:
-        cpu: 50m
-        memory: 64Mi
+        cpu: 100m
+        memory: 128Mi
       type: Container
