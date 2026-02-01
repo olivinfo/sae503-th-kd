@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quotes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: quotes
+  template:
+    metadata:
+      labels:
+        service: quotes
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: quotes-service
+        image: {{ .Values.image.registry }}/quotes:{{ .Values.image.tag }}
+        env:
+        - name: REDIS_HOST
+          value: "redis-svc"
+        - name: REDIS_PORT
+          value: "6379"
+        ports:
+        - containerPort: 5000
