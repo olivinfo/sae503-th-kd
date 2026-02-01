@@ -62,3 +62,41 @@ L'analyse s'étend à la définition des images Docker via les Dockerfiles pour 
 
 **Résultat** : Les rapports Trivy pour `users`, `quotes` et `search` affiche désormais **0 mauvaises configurations** détectées.
 
+
+
+## 6. Configuration des Secrets
+
+Pour configurer les secrets dans Kubernetes, nous procédons comme suit :
+
+### a) Création des secrets pour les applications Quotes, Search et Users
+Ce secret contient la clé d'administration utilisée par le service `quotes`, la même démarche a été fait pour les services `search` et `users`. Il doit être créé manuellement dans chaque namespace pour garantir l'isolation.
+
+**Pour le namespace de Recette :**
+```bash
+kubectl create secret generic quotes-secrets \
+  --from-literal=ADMIN_KEY='secret1' \
+  -n cch-recette
+```
+**Pour le namespace de Production :**
+
+```bash
+kubectl create secret generic quotes-secrets \
+  --from-literal=ADMIN_KEY='secret1' \
+  -n cch-production
+```
+
+## b) Utilisation du secret dans les ressources
+
+Enfin, il faut référencer ce secret dans la configuration des conteneurs (par exemple dans quotes.yaml) afin que l'application puisse consommer la variable d'environnement :
+```yaml
+# Extrait du déploiement
+spec:
+  containers:
+  - name: quotes
+    env:
+    - name: ADMIN_KEY
+      valueFrom:
+        secretKeyRef:
+          name: quotes-secrets
+          key: ADMIN_KEY
+```
