@@ -120,30 +120,3 @@ spec:
           key: ADMIN_KEY
 ```
 
-## 7. Sécurité et Audit avec Trivy Operator
-
-L'opérateur Trivy scanne automatiquement les images de nos containers et les configurations Kubernetes pour détecter des vulnérabilités (CVE).
-
-### a) Installation via Helm
-Nous installons l'opérateur dans un namespace dédié pour isoler les outils d'audit.
-
-```bash
-# 1. Ajouter le dépôt Helm Aqua Security
-helm repo add aquasecurity https://aquasecurity.github.io/helm-charts/
-helm repo update
-
-# 2. Installer l'opérateur dans le namespace 'trivy-namespace'
-# On configure l'opérateur pour surveiller nos namespaces de recette et prod
-helm install trivy-operator aquasecurity/trivy-operator \
-  --namespace trivy-system \
-  --trivy-namespace \
-  --set="trivy.operator.targetNamespaces=cch-recette,cch-production"
-```
-
-### b) Utilisation et lecture des rapports
-Trivy génère des rapports automatiquement. Il n'y a pas de commande de scan à lancer, il suffit de consulter les ressources créées dans vos namespaces.
-
-Pour voir un résumé des failles trouvées dans le namespace de recette :
-```
-kubectl get vulnerabilityreports -n cch-recette
-```
