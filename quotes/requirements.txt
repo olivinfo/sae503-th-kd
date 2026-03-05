@@ -1,3 +1,8 @@
 flask
 redis
 flasgger
+opentelemetry-distro
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-flask
+opentelemetry-instrumentation-redis
+opentelemetry-instrumentation-requests
