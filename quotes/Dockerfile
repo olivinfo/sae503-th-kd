@@ -15,8 +15,10 @@ USER appuser
 ENV OTEL_SERVICE_NAME=quotes
 ENV OTEL_TRACES_EXPORTER=otlp
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+ENV OTEL_METRICS_EXPORTER=none
 ENV OTEL_PYTHON_LOG_CORRELATION=true
 
 EXPOSE 5002
 
-CMD ["/usr/local/bin/opentelemetry-instrument", "python", "app.py"]
+ENTRYPOINT ["/usr/local/bin/opentelemetry-instrument"]
+CMD ["python", "app.py"]
