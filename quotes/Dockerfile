@@ -12,6 +12,11 @@ RUN adduser -D appuser
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost:5002/ || exit 1
 USER appuser
 
+ENV OTEL_SERVICE_NAME=quotes
+ENV OTEL_TRACES_EXPORTER=otlp
+ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+ENV OTEL_PYTHON_LOG_CORRELATION=true
+
 EXPOSE 5002
 
-CMD ["python", "app.py"]
+CMD ["/deps/bin/opentelemetry-instrument", "python", "app.py"]
